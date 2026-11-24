@@ -119,7 +119,19 @@ SECRET_PATTERNS = [
 ]
 
 
+# Extraction protocol this analyzer declares (AR082 / AC-403). Pinned
+# explicitly so core's declared_extraction_protocol() reports "2.0" instead
+# of inheriting the SDK default. Plugins written against protocol 1.0 keep
+# loading indefinitely: core lifts their ScanResult into the v2
+# ExtractionResult container via attackmap.extraction.adapters.
+EXTRACTION_PROTOCOL_VERSION = "2.0"
+
+
 class PhpWebAnalyzer:
+    # Explicit protocol declaration; see the module-level constant above.
+    # V1 payloads still load via the core v1 adapter.
+    EXTRACTION_PROTOCOL_VERSION = EXTRACTION_PROTOCOL_VERSION
+
     metadata = AnalyzerMetadata(
         name="php-web",
         display_name="PHP Web Analyzer",
